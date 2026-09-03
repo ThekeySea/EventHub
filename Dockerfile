@@ -27,10 +27,13 @@ RUN apt-get update && apt-get install -y \
     && pecl install redis && docker-php-ext-enable redis \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Composer WITHOUT pulling docker image
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /app
+
+# Create .env file if not exists (Railway provides env vars at runtime)
+RUN touch /app/.env
 
 # Install PHP dependencies (no dev)
 COPY composer.json composer.lock ./
@@ -39,23 +42,28 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 # Copy application code
 COPY . .
 
-# Generate autoloader & optimize
-RUN composer dump-autoload --optimize \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan event:cache
+# Create .env if not exists (after COPY to avoid overwriting)
+RUN touch /app/.env
 
-# Copy built assets from node stage
-COPY --from=node-builder /app/public/build/ public/build/
+# Generate autoloader & optimize
+RUN composer dump-autoload --optimize
 
 # Storage permissions
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p storage/logs \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && chmod -R 775 storage
+
+# Copy built assets from node stage
+COPY --from=node-builder /app/public/build/ public/build/
 
 # Expose port
 EXPOSE 8000
 
-# Start command
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Start command - generate key, cache config, then serve
+CMD php artisan key:generate --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan migrate --force && \
+    php artisan serve --host=0.0.0.0 --port=$PORT

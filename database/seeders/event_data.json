@@ -1,0 +1,15 @@
+{
+    "events": [
+        ["Konferensi Teknologi Indonesia 2026", "teknologi", "luring", "seminar", "jakarta", "offline", "upfront", "BCA: 1234567890 a.n. EventHub Organizer\nMandiri: 9876543210 a.n. EventHub Organizer", "Jakarta Convention Center", null, 30, 30, "Asia/Jakarta", 500, "published", null],
+        ["Festival Musik Java 2026", "musik", "luring", "konser", "jakarta", "offline", "onsite", null, "GBK Senayan", null, 35, 35, "Asia/Jakarta", 1000, "published", null],
+        ["Workshop Pengembangan Web Daring", "pendidikan", "daring", "workshop", "virtual-online", "online", "free", null, null, "https://zoom.us/j/123456", 14, 14, "Asia/Jakarta", 100, "published", null],
+        ["Turnamen Sepak Bola Surabaya", "olahraga", "luring", "kompetisi", "surabaya", "offline", "upfront", "BNI: 111222333 a.n. Panitia Tournament", "Stadion Gelora Bung Tomo", null, 21, 21, "Asia/Jakarta", 200, "published", null],
+        ["Meetup Startup Bandung", "bisnis", "luring", "community-gathering", "bandung", "offline", "onsite", null, "Bandung Creative Hub", null, 10, 10, "Asia/Jakarta", 150, "published", null],
+        ["Pameran Seni Modern Hybrid", "seni", "hybrid", null, "jakarta", "hybrid", "free", null, "National Gallery Jakarta", "https://meet.google.com/abc-defg-hij", 45, 45, "Asia/Jakarta", 300, "published", null],
+        ["Gathering Komunitas 2026", "komunitas", "luring", "community-gathering", "jakarta", "offline", "free", null, "Community Hall Jakarta", null, 50, 50, "Asia/Jakarta", 100, "pending", null],
+        ["Kompetisi Desain UI/UX", "kompetisi", "daring", "kompetisi", "virtual-online", "online", "free", null, null, "https://forms.gle/abc123", 40, 40, "Asia/Jakarta", 200, "pending", null],
+        ["Meetup Developer Laravel", "teknologi", "luring", null, "jakarta", "offline", "free", null, "Tech Hub Jakarta", null, 60, 60, "Asia/Jakarta", 100, "draft", null],
+        ["Seminar Pemasaran Digital", "pendidikan", "daring", "seminar", "virtual-online", "online", "free", null, null, "https://zoom.us/j/999999", 55, 55, "Asia/Jakarta", 250, "draft", null]
+    ],
+    "banners": []
+}

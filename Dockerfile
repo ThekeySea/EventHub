@@ -32,9 +32,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 WORKDIR /app
 
-# Create .env file if not exists (Railway provides env vars at runtime)
-RUN touch /app/.env
-
 # Install PHP dependencies (no dev)
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
@@ -42,26 +39,28 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 # Copy application code
 COPY . .
 
-# Create .env if not exists (after COPY to avoid overwriting)
+# Create .env if not exists
 RUN touch /app/.env
+
+# Create storage directories
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p storage/app/public \
+    && chmod -R 775 storage \
+    && chmod -R 775 bootstrap/cache
 
 # Generate autoloader & optimize
 RUN composer dump-autoload --optimize
 
-# Storage permissions
-RUN mkdir -p storage/framework/{sessions,views,cache} \
-    && mkdir -p storage/logs \
-    && chmod -R 775 storage bootstrap/cache \
-    && chmod -R 775 storage
-
-# Copy built assets from node stage
-COPY --from=node-builder /app/public/build/ public/build/
+# Copy built assets from node stage (AFTER composer install)
+COPY --from=node-builder /app/public/build/ /app/public/build/
 
 # Expose port
 EXPOSE 8000
 
-# Start command - generate key, cache config, then serve
+# Start command - create storage link at runtime
 CMD php artisan key:generate --force && \
+    php artisan storage:link --force && \
     php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
